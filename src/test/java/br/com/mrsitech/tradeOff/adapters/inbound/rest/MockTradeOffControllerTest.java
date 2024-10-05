@@ -2,16 +2,12 @@ package br.com.mrsitech.tradeOff.adapters.inbound.rest;
 
 import br.com.mrsitech.tradeOff.adapters.inbound.rest.dto.TradeOffBodyRequestDTO;
 import br.com.mrsitech.tradeOff.adapters.inbound.rest.dto.TradeOffResponseDTO;
-import br.com.mrsitech.tradeOff.adapters.inbound.rest.dto.WheysDTO;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import br.com.mrsitech.tradeOff.adapters.inbound.rest.dto.WheyDTO;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 public class MockTradeOffControllerTest {
@@ -42,8 +38,8 @@ public class MockTradeOffControllerTest {
 
         return TradeOffBodyRequestDTO.builder().phoneNumber("41996447054").wheys(
                 Arrays.asList(
-                    WheysDTO.builder().productNumber(1).priceOfPack(65.50).weightPackInGrams(450).dosePerGrams(32).proteinsPerDose(21).build(),
-                    WheysDTO.builder().productNumber(2).priceOfPack(70.50).weightPackInGrams(450).dosePerGrams(32).proteinsPerDose(18).build()
+                    WheyDTO.builder().productNumber(1).priceOfPack(65.50).weightPackInGrams(450).dosePerGrams(32).proteinsPerDose(21).build(),
+                    WheyDTO.builder().productNumber(2).priceOfPack(70.50).weightPackInGrams(450).dosePerGrams(32).proteinsPerDose(18).build()
                 )
         ).build();
 

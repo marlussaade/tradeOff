@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WheysDTO {
+public class WheyDTO {
 
-    private int productNumber;
-    private Double priceOfPack;
-    private int weightPackInGrams;
-    private int dosePerGrams;
-    private int proteinsPerDose;
+    private double productNumber;
+    private double priceOfPack;
+    private double weightPackInGrams;
+    private double dosePerGrams;
+    private double proteinsPerDose;
 
 }

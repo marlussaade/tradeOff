@@ -1,4 +1,4 @@
-package br.com.mrsitech.tradeOff.adapters.inbound.rest.dto;
+package br.com.mrsitech.tradeOff.application.mappers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradeOffBodyRequestDTO {
-    private String phoneNumber;
-    private List<WheyDTO> wheys;
+public class BrasilApiGetDddResponseDTO {
+
+        private String state;
+        private List<String> cities;
+
 }

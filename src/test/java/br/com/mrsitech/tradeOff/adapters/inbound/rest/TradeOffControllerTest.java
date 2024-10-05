@@ -35,7 +35,5 @@ public class TradeOffControllerTest {
                         .contentType("application/json")
                         .content(MockTradeOffControllerTest.mockOfShouldReturnOkStatusForPostTradeOff()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
     }
-
 }
