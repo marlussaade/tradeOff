@@ -1,0 +1,56 @@
+version: '3.8'
+
+services: 
+  zookeeper: #"alias" which every others conteiner can refer to it by this name, inside this document
+    image: confluentinc/cp-zookeeper:latest #Image is code+docker configs, download from confluentinc oficial kafka website
+    container_name: zookeeper #in the next space, zookeeper, kafka, and kafka ui, are the names of each Docker's Conteiner
+    restart: always # Ensures the container always restarts if it crashes or Docker restarts.
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 #Defines which port Zookeeper listens on (inside the container).
+      ZOOKEEPER_TICK_TIME: 2000 #Controls heartbeat intervals between Zookeeper nodes (default: 2000 ms).
+    ports:
+      - "2181:2181" #HOST_PORT (local machine):CONTAINER_PORT (conteiner inside docker port)
+    networks:
+      - kafka_network #Assigns this container as a kafka_network friendly, his lets other services (like Kafka conteiner) communicate with Zookeeper using its service name (zookeeper). The network is defined at the bottom of the file.
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    restart: always
+    depends_on: #Ensures that zookeeper starts before kafka. Kafka needs Zookeeper to manage cluster state and broker coordination.
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1 #Each Kafka broker needs a unique ID. Since we have only one broker, we set it to 1.
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 #Before : called zookeeper is the service name defined in 4th line and 2181 is the port inside the Zookeeper container
+      #ABOUT PLAINTEXT INTERNAL AND EXTERNAL: PLAINTEXT is a Unencrypted data, kafka (Docker service name) and 9092 is used inside Docker, conteiner comunication network (kafka_network). PLAINTEXT_EXTERNAL is a Unencrypted localhost (your local machine) 9093 is used outside Docker, e.g., Spring Boot running directly on your PC
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_EXTERNAL://localhost:9093 #Kafka needs to tell clients how to connect to it. ( Kafka is a Provider)
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_EXTERNAL://0.0.0.0:9093 #Defines where Kafka listens for connections.( Kafka is a consumer)
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT #Maps security protocols to the defined listeners. In this case, both PLAINTEXT (inside Docker) and PLAINTEXT_EXTERNAL (external) are set to use PLAINTEXT (no SSL encryption).
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT #Defines which listener Kafka brokers use to talk to each other.Since we only have one Kafka broker, this setting isn’t critical.
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 #Kafka stores topic metadata in multiple brokers for reliability.Since we have only one Kafka broker, we must set this to 1.If we had multiple brokers, a value like 3 would be better.
+      # Increase Message Size Limit:
+      KAFKA_MESSAGE_MAX_BYTES: 200000000  # 200MB
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 200000000  # 200MB
+    ports:
+      - "9092:9092"  # Kafka internal communication
+      - "9093:9093"  # Kafka external access (for Spring Boot)
+    networks:
+      - kafka_network # Connects Kafka to kafka_network so it can talk to Zookeeper and Kafka-UI.
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: always
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: kafka
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka:9092  # Docker services talk using `kafka:9092`
+    ports:
+      - "9898:8080"
+    networks:
+      - kafka_network
+
+networks:
+  kafka_network:
+    driver: bridge # Isolated from other containers unless connected to the same network.Allows containers to communicate using service names (instead of IP addresses).Allows your local machine to access containers via mapped ports (ports: section).

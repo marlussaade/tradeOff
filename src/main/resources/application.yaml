@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  mvc:
+    servlet:
+      context-path: /fitness/tradeoffprocessor/ms/v1
+
+spring:
+  application.name: ms-tradeoff-processor-v1
+  kafka:
+    bootstrap-servers: localhost:9093  # Use Kafka external listener (localhost:9093)
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      max-request-size: 200000000  # Increase producer request limit
+      properties:
+        spring.json.trusted.packages: "*"
+    consumer:
+      fetch-max-bytes: 200000000  # Increase consumer fetch limit
+
+events:
+  kafka:
+    send:
+      client-interaction-non-sql: client-interaction-topic
+
+logging:
+  level:
+    org.apache.kafka: DEBUG
+    org.springframework.kafka: DEBUG
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  default-produces-media-type: application/json
+  show-actuator: true
+  paths-to-match: /**

@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.4</version>  <!-- ✅ Corrected Spring Boot version -->
+		<relativePath/>
+	</parent>
+
+	<groupId>br.com.marlussaade</groupId>
+	<artifactId>mstradeoffprocessorv1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ms-tradeoff-processor-v1</name>
+	<description>Trade Off life processor</description>
+
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+
+	<dependencies>
+		<!-- ✅ Use either WebFlux or WebMVC (choose one) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>  <!-- ✅ Use WebMVC -->
+		</dependency>
+
+		<!-- ✅ Spring Kafka -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
+		<!-- ✅ Lombok (Set provided scope) -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>  <!-- ✅ Now it's correctly provided -->
+		</dependency>
+
+		<!-- ✅ Hibernate Validator (Needed for Jakarta Validation in Spring Boot 3) -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.1.Final</version>
+		</dependency>
+
+		<!-- ✅ Springdoc OpenAPI for Swagger -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>  <!-- ✅ Use WebMVC UI, not WebFlux -->
+			<version>2.5.0</version>
+		</dependency>
+
+		<!-- ✅ Spring Boot Logging -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
